@@ -35,12 +35,12 @@ iter=10000
 
 if [ -d "$file" ] && [ "$enc" -eq 1 ]; then
   tar Jcf - "$file" | openssl "$cipher" -e -in - -out "${file%/}.enc" -iter "$iter" \
-    && find "$file" -type f -exec shred {} \; \
-    && rm -r "$file"
+    && find "$file" -type f -exec shred -f {} \; \
+    && rm -rf "$file"
 elif [ -f "$file" ] && [ "$enc" -eq 0 ]; then
   openssl "$cipher" -d -in "$file" -iter "$iter" | tar Jxf - \
-    && shred "$file" \
-    && rm "$file"
+    && shred -f "$file" \
+    && rm -f "$file"
 else
   usage
   exit 4
